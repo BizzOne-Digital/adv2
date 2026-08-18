@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { getEnv } from "@/lib/env";
+import { getEnv, validateProductionEnv } from "@/lib/env";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -15,11 +15,13 @@ global.mongooseCache = cached;
 export async function connectDB() {
   if (cached.conn) return cached.conn;
 
+  validateProductionEnv();
   const { mongodbUri } = getEnv();
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(mongodbUri, {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 15000,
     });
   }
 

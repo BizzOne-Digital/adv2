@@ -48,8 +48,14 @@ export async function getPublishedServices(filters?: {
   };
   if (filters?.category) query.category = filters.category;
   if (filters?.featured) query.featured = true;
-  if (filters?.search) {
-    query.$text = { $search: filters.search };
+  const search = filters?.search?.trim();
+  if (search) {
+    const pattern = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    query.$or = [
+      { title: { $regex: pattern, $options: "i" } },
+      { shortDescription: { $regex: pattern, $options: "i" } },
+      { category: { $regex: pattern, $options: "i" } },
+    ];
   }
   const services = await Service.find(query).sort({ order: 1, title: 1 }).lean();
   return services.map((s) => serializeDoc(s as never)!);

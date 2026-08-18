@@ -7,12 +7,19 @@ function requireEnv(key: string): string {
 }
 
 export function getEnv() {
+  const isProd = process.env.NODE_ENV === "production";
   return {
-    mongodbUri:
-      process.env.MONGODB_URI ??
-      "mongodb://127.0.0.1:27017/light_for_immigrants",
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-    sessionSecret: process.env.SESSION_SECRET ?? "dev-secret-change-in-production-min-32-chars",
+    mongodbUri: isProd
+      ? requireEnv("MONGODB_URI")
+      : (process.env.MONGODB_URI ??
+          "mongodb://127.0.0.1:27017/light_for_immigrants"),
+    siteUrl: isProd
+      ? requireEnv("NEXT_PUBLIC_SITE_URL")
+      : (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    sessionSecret: isProd
+      ? requireEnv("SESSION_SECRET")
+      : (process.env.SESSION_SECRET ??
+          "dev-secret-change-in-production-min-32-chars"),
     adminSeedEmail: process.env.ADMIN_SEED_EMAIL,
     adminSeedPassword: process.env.ADMIN_SEED_PASSWORD,
     smtp: {

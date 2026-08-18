@@ -9,6 +9,9 @@ import { IntroWrapper } from "@/components/motion/intro-wrapper";
 import { RouteTransition } from "@/components/motion/route-transition";
 import "../globals.css";
 
+/** CMS + MongoDB content must load at request time (not empty build-time cache). */
+export const dynamic = "force-dynamic";
+
 const display = Syne({
   variable: "--font-display",
   subsets: ["latin"],

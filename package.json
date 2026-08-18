@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "seed": "tsx src/seed/index.ts",
+    "publish-services": "tsx src/seed/publish-services.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

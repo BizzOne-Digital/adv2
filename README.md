@@ -117,12 +117,23 @@ Files save to `public/uploads/images/YYYY/MM/` and `public/uploads/videos/YYYY/M
 
 ## Deployment checklist
 
-- [ ] Set production `SESSION_SECRET`, `MONGODB_URI`, `NEXT_PUBLIC_SITE_URL`
+- [ ] Set production env vars on your host (**required for build and runtime**):
+  - `MONGODB_URI` — same Atlas URI as local (database: `light_for_immigrants`)
+  - `SESSION_SECRET` — 32+ random characters
+  - `NEXT_PUBLIC_SITE_URL` — e.g. `https://your-domain.com`
+- [ ] **MongoDB Atlas** → Network Access → allow `0.0.0.0/0` (or your host IPs) so serverless can connect
+- [ ] After first deploy, run `npm run seed` locally (uses `.env.local`) or `npm run publish-services` to ensure services are `published`
+- [ ] Redeploy after setting env vars (Vercel/Netlify rebuild on env change)
 - [ ] Configure persistent volume for `public/uploads`
-- [ ] Run `npm run seed` once (or migrate existing data)
 - [ ] Replace Gmail with domain email in Settings
 - [ ] Configure MongoDB backups
 - [ ] Use HTTPS (Secure cookies enabled in production automatically)
+
+### Vercel
+
+1. Project → Settings → Environment Variables → add all three required vars for **Production** and **Preview**
+2. Redeploy from Deployments tab
+3. If services still missing, run locally: `npm run publish-services` then hard refresh the live site
 
 ## Logo
 

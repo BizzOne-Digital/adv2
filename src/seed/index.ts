@@ -1,4 +1,5 @@
 import path from "node:path";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Types } from "mongoose";
 import { connectDB } from "@/lib/db/connect";
@@ -25,6 +26,30 @@ import type { MediaRef } from "@/types";
 import { siteImagePath, siteImageRef } from "@/lib/media/site-assets";
 
 const __filename = fileURLToPath(import.meta.url);
+
+/** Load `.env.local` / `.env` so `npm run seed` picks up MONGODB_URI and admin creds. */
+function loadEnvFiles() {
+  const root = process.cwd();
+  for (const name of [".env.local", ".env"]) {
+    try {
+      const filePath = path.join(root, name);
+      const content = readFileSync(filePath, "utf8");
+      for (const line of content.split("\n")) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith("#")) continue;
+        const eq = trimmed.indexOf("=");
+        if (eq === -1) continue;
+        const key = trimmed.slice(0, eq).trim();
+        const value = trimmed.slice(eq + 1).trim();
+        if (!process.env[key]) process.env[key] = value;
+      }
+    } catch {
+      // optional file
+    }
+  }
+}
+
+loadEnvFiles();
 
 function placeholderImage(index: number, alt: string): MediaRef {
   const pool = [2, 5, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60];
@@ -367,7 +392,7 @@ async function seedPages(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Pages: ${created} created, ${skipped} skipped`);
+  console.log(`  Pages: ${created} created, ${skipped} already existed`);
 }
 
 async function seedServices(adminId?: Types.ObjectId) {
@@ -379,6 +404,15 @@ async function seedServices(adminId?: Types.ObjectId) {
     const slug = slugify(data.title);
     const exists = await Service.findOne({ slug });
     if (exists) {
+      await Service.updateOne(
+        { _id: exists._id },
+        {
+          $set: {
+            status: "published",
+            isDeleted: false,
+          },
+        },
+      );
       skipped++;
       continue;
     }
@@ -459,7 +493,7 @@ async function seedServices(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Services: ${created} created, ${skipped} skipped`);
+  console.log(`  Services: ${created} created, ${skipped} already existed`);
 }
 
 const FAQ_CATEGORY_SEEDS = [
@@ -616,7 +650,7 @@ async function seedFaqs(adminId?: Types.ObjectId) {
   }
 
   console.log(
-    `  FAQ categories: ${categoriesCreated} created; FAQs: ${faqsCreated} created, ${faqsSkipped} skipped`,
+    `  FAQ categories: ${categoriesCreated} created; FAQs: ${faqsCreated} created, ${faqsSkipped} already existed`,
   );
 }
 
@@ -646,7 +680,7 @@ async function seedTestimonials(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Testimonials: ${created} created, ${skipped} skipped`);
+  console.log(`  Testimonials: ${created} created, ${skipped} already existed`);
 }
 
 const GALLERY_CATEGORY_SEEDS = [
@@ -714,7 +748,7 @@ async function seedGallery(adminId?: Types.ObjectId) {
   }
 
   console.log(
-    `  Gallery categories: ${categoriesCreated} created; items: ${itemsCreated} created, ${itemsSkipped} skipped`,
+    `  Gallery categories: ${categoriesCreated} created; items: ${itemsCreated} created, ${itemsSkipped} already existed`,
   );
 }
 
@@ -778,7 +812,7 @@ async function seedBlogPosts(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Blog posts: ${created} created, ${skipped} skipped`);
+  console.log(`  Blog posts: ${created} created, ${skipped} already existed`);
 }
 
 const TEAM_SEEDS = [
@@ -837,7 +871,7 @@ async function seedTeamMembers(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Team members: ${created} created, ${skipped} skipped`);
+  console.log(`  Team members: ${created} created, ${skipped} already existed`);
 }
 
 const PRICING_CARD_SEEDS = [
@@ -895,7 +929,7 @@ async function seedPricingCards(adminId?: Types.ObjectId) {
     created++;
   }
 
-  console.log(`  Pricing cards: ${created} created, ${skipped} skipped`);
+  console.log(`  Pricing cards: ${created} created, ${skipped} already existed`);
 }
 
 export async function seed(): Promise<void> {
@@ -915,7 +949,17 @@ export async function seed(): Promise<void> {
   await seedTeamMembers(adminId);
   await seedPricingCards(adminId);
 
-  console.log("Seed completed.");
+  console.log("\nCurrent database totals:");
+  console.log(`  Pages: ${await Page.countDocuments()}`);
+  console.log(`  Services: ${await Service.countDocuments()}`);
+  console.log(`  Testimonials: ${await Testimonial.countDocuments()}`);
+  console.log(`  FAQs: ${await FAQ.countDocuments()}`);
+  console.log(`  Gallery items: ${await GalleryItem.countDocuments()}`);
+  console.log(`  Blog posts: ${await BlogPost.countDocuments()}`);
+  console.log(`  Team members: ${await TeamMember.countDocuments()}`);
+  console.log(`  Users: ${await User.countDocuments()}`);
+
+  console.log("\nSeed completed.");
 }
 
 const scriptPath = process.argv[1]?.replace(/\\/g, "/") ?? "";

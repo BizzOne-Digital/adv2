@@ -94,7 +94,19 @@ export function RevealOnScroll({
       });
     }, el);
 
-    return () => ctx.revert();
+    const fallbackTimer = window.setTimeout(() => {
+      gsap.set(el, { autoAlpha: 1, clearProps: "clipPath,x,y,transform" });
+      if (targets instanceof Element) {
+        gsap.set(targets, { autoAlpha: 1, clearProps: "clipPath,x,y,transform" });
+      } else {
+        gsap.set(targets, { autoAlpha: 1, clearProps: "clipPath,x,y,transform" });
+      }
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      ctx.revert();
+    };
   }, [animation, delay, once]);
 
   return (
