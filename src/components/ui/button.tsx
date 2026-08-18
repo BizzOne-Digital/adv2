@@ -8,7 +8,7 @@ const variantStyles = {
   secondary:
     "border border-near-black/20 bg-transparent text-near-black hover:border-signal-red hover:text-signal-red",
   outlineLight:
-    "border border-warm-ivory/50 bg-transparent text-warm-ivory hover:border-white hover:bg-white/10 hover:text-white",
+    "border-2 border-warm-ivory/80 bg-warm-ivory/10 text-warm-ivory hover:border-white hover:bg-warm-ivory/20 hover:text-white",
   ghost:
     "bg-transparent text-near-black hover:bg-near-black/5 hover:text-signal-red",
 } as const;

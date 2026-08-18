@@ -528,17 +528,22 @@ export function ServiceDetailView({
           <RevealOnScroll animation="fade">
             <div className="mx-auto max-w-2xl text-center">
               <SectionHeading
-                title="Ready to take the next step?"
-                subtitle="Reach out to discuss your needs. Information on this site is for general guidance and does not replace legal advice or emergency services."
+                title="Ready to connect?"
+                subtitle="Reach out to discuss your needs. Information shared here does not replace legal advice."
                 theme="dark"
                 align="center"
               />
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <Button asChild size="lg">
-                  <Link href={bookHref}>{bookLabel}</Link>
+              <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+                <Button href={bookHref} size="lg" className="sm:w-auto">
+                  {bookLabel}
                 </Button>
-                <Button asChild variant="outlineLight" size="lg">
-                  <Link href="/contact">Contact us</Link>
+                <Button
+                  href="/contact"
+                  variant="outlineLight"
+                  size="lg"
+                  className="sm:w-auto"
+                >
+                  Contact us
                 </Button>
               </div>
             </div>

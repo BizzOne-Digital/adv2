@@ -1095,6 +1095,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
         internalLabel: "Shop CTA",
         heading: "Ask about an item",
         primaryCta: { label: "Contact us", href: "/contact" },
+        secondaryCta: { label: "View programs", href: "/services" },
         isVisible: true,
         order: 4,
         animation: "fade",

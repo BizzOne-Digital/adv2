@@ -60,22 +60,30 @@ function CtaButtons({
   centered?: boolean;
 }) {
   const onColored = theme === "dark" || theme === "red";
-  if (!primary && !secondary) return null;
+  const secondaryCta =
+    secondary ??
+    (onColored ? { label: "Contact us", href: "/contact" } : undefined);
+  if (!primary && !secondaryCta) return null;
   return (
     <div
       className={cn(
-        "mt-8 flex flex-wrap gap-4",
-        centered && "items-center justify-center",
+        "mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center",
+        centered && "sm:justify-center",
       )}
     >
       {primary && (
-        <Button asChild>
+        <Button asChild size="lg" className={centered ? "sm:w-auto" : undefined}>
           <Link href={primary.href}>{primary.label}</Link>
         </Button>
       )}
-      {secondary && (
-        <Button asChild variant={onColored ? "outlineLight" : "secondary"}>
-          <Link href={secondary.href}>{secondary.label}</Link>
+      {secondaryCta && (
+        <Button
+          asChild
+          size="lg"
+          variant={onColored ? "outlineLight" : "secondary"}
+          className={centered ? "sm:w-auto" : undefined}
+        >
+          <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
         </Button>
       )}
     </div>
