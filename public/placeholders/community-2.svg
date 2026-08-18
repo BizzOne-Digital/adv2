@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Newcomer welcome placeholder">
+  <defs>
+    <linearGradient id="g2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#090909"/>
+      <stop offset="100%" stop-color="#E21D2E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g2)"/>
+  <rect x="200" y="180" width="800" height="440" rx="24" fill="#F6F1E8" opacity="0.08"/>
+  <text x="600" y="420" text-anchor="middle" fill="#F6F1E8" font-family="Arial,sans-serif" font-size="28">Welcome Placeholder</text>
+</svg>
