@@ -77,7 +77,10 @@ export function RevealOnScroll({
     const preset = presetMap[animation] ?? presetMap.fade;
     const targets =
       animation === "stagger"
-        ? el.querySelectorAll("[data-reveal-item], [data-reveal-item] *")
+        ? (() => {
+            const items = el.querySelectorAll("[data-reveal-item]");
+            return items.length ? items : el;
+          })()
         : el;
 
     const ctx = gsap.context(() => {

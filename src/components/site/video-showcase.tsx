@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { RevealOnScroll } from "@/components/motion/reveal-on-scroll";
+import { SiteVideo as SiteVideoPlayer } from "@/components/site/site-video";
 import type { MediaRef } from "@/types";
 import { SITE_VIDEOS, type SiteVideo } from "@/lib/media/site-assets";
 
@@ -27,6 +28,7 @@ function normalizeVideos(videos?: SiteVideo[] | MediaRef[]): SiteVideo[] {
       src: media.src,
       alt: media.alt,
       title: media.caption ?? `Community video ${i + 1}`,
+      poster: media.thumbnailSrc,
     };
   });
 }
@@ -60,20 +62,14 @@ export function VideoShowcase({
             align="center"
           />
         </RevealOnScroll>
-      <div className="mt-12 grid min-w-0 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid min-w-0 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((video, i) => (
-            <RevealOnScroll key={video.src} animation="stagger" delay={i * 0.08}>
-              <article className="overflow-hidden rounded-2xl border border-border bg-near-black/5">
-                <div className="relative aspect-video bg-near-black">
-                  <video
-                    src={video.src}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="h-full w-full object-cover"
-                    aria-label={video.alt}
-                  />
-                </div>
+            <RevealOnScroll key={video.src} animation="fade" delay={i * 0.08}>
+              <article
+                data-reveal-item
+                className="overflow-hidden rounded-2xl border border-border bg-near-black/5"
+              >
+                <SiteVideoPlayer src={video.src} alt={video.alt} poster={video.poster} />
                 <div className="p-4">
                   <h3
                     className={cn(

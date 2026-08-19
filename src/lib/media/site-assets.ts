@@ -16,6 +16,7 @@ export type SiteVideo = {
   src: string;
   alt: string;
   title: string;
+  poster?: string;
 };
 
 export const SITE_VIDEOS: SiteVideo[] = [
@@ -23,16 +24,19 @@ export const SITE_VIDEOS: SiteVideo[] = [
     src: "/videos/vid1.mp4",
     alt: "Community welcome and orientation event",
     title: "Welcome day highlights",
+    poster: "/images/pic2.jpeg",
   },
   {
     src: "/videos/vid2.mp4",
     alt: "Program workshop with newcomers",
     title: "Workshop in action",
+    poster: "/images/pic3.jpeg",
   },
   {
     src: "/videos/vid3.mp4",
     alt: "Community gathering and celebration",
     title: "Together in community",
+    poster: "/images/pic4.jpeg",
   },
 ];
 

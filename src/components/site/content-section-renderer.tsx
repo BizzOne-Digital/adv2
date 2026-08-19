@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SiteImage } from "@/components/site/site-image";
+import { SiteVideo } from "@/components/site/site-video";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
@@ -118,16 +119,12 @@ function parseValues(html?: string): { title: string; description: string }[] {
 function MediaBlock({ media, className }: { media: MediaRef; className?: string }) {
   if (media.type === "video") {
     return (
-      <div className={cn("relative aspect-[4/3] overflow-hidden rounded-2xl bg-near-black", className)}>
-        <video
-          src={media.src}
-          controls
-          playsInline
-          preload="metadata"
-          className="h-full w-full object-cover"
-          aria-label={media.alt}
-        />
-      </div>
+      <SiteVideo
+        src={media.src}
+        alt={media.alt}
+        poster={media.thumbnailSrc}
+        className={cn("rounded-2xl", className)}
+      />
     );
   }
 
