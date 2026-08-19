@@ -39,7 +39,6 @@ export const SITE_VIDEOS: SiteVideo[] = [
 export const HERO_BACKGROUND = "/images/hero-background.png";
 
 export function siteImagePath(n: number): string {
-  if (n === 1) return "/images/pic1";
   return `/images/pic${n}.jpeg`;
 }
 
