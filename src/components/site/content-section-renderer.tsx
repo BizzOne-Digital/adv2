@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { SiteImage } from "@/components/site/site-image";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,11 @@ import type { AnimationPreset, ContentSection, CtaLink, MediaRef } from "@/types
 import { allGalleryImages, SITE_VIDEOS } from "@/lib/media/site-assets";
 import { VideoShowcase } from "@/components/site/video-showcase";
 import { GalleryGrid } from "@/components/site/gallery-grid";
+import {
+  parseMetricItems,
+  parseNoteFromHtml,
+  parseValueItems,
+} from "@/lib/content/parse-section-html";
 
 type ContentSectionRendererProps = {
   sections: Array<Record<string, unknown> | ContentSection>;
@@ -91,37 +96,23 @@ function CtaButtons({
 }
 
 function parseTrustItems(html?: string): { value: string; label: string }[] {
-  if (!html) {
-    return [
-      { value: "15+", label: "Years serving newcomers" },
-      { value: "2,500+", label: "Families supported annually" },
-      { value: "40+", label: "Community partners" },
-    ];
-  }
-  try {
-    const parsed = JSON.parse(html) as { value: string; label: string }[];
-    if (Array.isArray(parsed)) return parsed;
-  } catch {
-    // fall through to plain-text fallback
-  }
-  return [{ value: "—", label: html.replace(/<[^>]*>/g, "") }];
+  const parsed = parseMetricItems(html);
+  if (parsed.length) return parsed;
+  return [
+    { value: "15+", label: "Years serving newcomers" },
+    { value: "2,500+", label: "Families supported annually" },
+    { value: "40+", label: "Community partners" },
+  ];
 }
 
 function parseValues(html?: string): { title: string; description: string }[] {
-  if (!html) {
-    return [
-      { title: "Dignity", description: "Every person deserves respect and agency in their journey." },
-      { title: "Belonging", description: "We build bridges between newcomers and host communities." },
-      { title: "Light", description: "Guidance that illuminates pathways to stability and hope." },
-    ];
-  }
-  try {
-    const parsed = JSON.parse(html) as { title: string; description: string }[];
-    if (Array.isArray(parsed)) return parsed;
-  } catch {
-    // fall through to plain-text fallback
-  }
-  return [{ title: "Our values", description: html.replace(/<[^>]*>/g, "") }];
+  const parsed = parseValueItems(html);
+  if (parsed.length) return parsed;
+  return [
+    { title: "Dignity", description: "Every person deserves respect and agency in their journey." },
+    { title: "Belonging", description: "We build bridges between newcomers and host communities." },
+    { title: "Light", description: "Guidance that illuminates pathways to stability and hope." },
+  ];
 }
 
 function MediaBlock({ media, className }: { media: MediaRef; className?: string }) {
@@ -142,12 +133,11 @@ function MediaBlock({ media, className }: { media: MediaRef; className?: string 
 
   return (
     <div className={cn("relative aspect-[4/3] overflow-hidden rounded-2xl", className)}>
-      <Image
+      <SiteImage
         src={media.src}
         alt={media.alt}
-        fill
-        className="object-cover"
         sizes="(max-width:1024px) 100vw, 50vw"
+        className="object-cover"
       />
     </div>
   );
@@ -155,16 +145,61 @@ function MediaBlock({ media, className }: { media: MediaRef; className?: string 
 
 function TrustStrip({ section }: { section: ContentSection }) {
   const items = parseTrustItems(section.bodyHtml);
+  const note = parseNoteFromHtml(section.bodyHtml);
+  const isMetrics = items.some((item) => item.value);
+  const sectionTheme = section.theme === "ivory" ? "ivory" : "dark";
+
   return (
-    <SectionShell section={{ ...section, theme: "dark" }}>
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-center sm:gap-x-10">
-        {items.map((item) => (
-          <div key={item.label} className="min-w-[8rem]">
-            <p className="font-display text-3xl font-bold text-signal-red">{item.value}</p>
-            <p className="mt-1 text-sm text-warm-ivory/70">{item.label}</p>
-          </div>
-        ))}
-      </div>
+    <SectionShell section={{ ...section, theme: sectionTheme }}>
+      {(section.eyebrow || section.heading || section.subheading) && (
+        <div className="mx-auto max-w-3xl text-center">
+          <SectionHeading
+            eyebrow={section.eyebrow}
+            title={section.heading ?? section.internalLabel}
+            subtitle={section.subheading}
+            theme={sectionTheme === "dark" ? "dark" : "light"}
+            align="center"
+            className="mx-auto"
+          />
+        </div>
+      )}
+      {note && !isMetrics && (
+        <p
+          className={cn(
+            "mx-auto mt-6 max-w-3xl text-center text-lg leading-relaxed",
+            sectionTheme === "dark" ? "text-warm-ivory/75" : "text-muted",
+          )}
+        >
+          {note}
+        </p>
+      )}
+      {note && isMetrics && (
+        <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-warm-ivory/60">{note}</p>
+      )}
+      {isMetrics && (
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-6 text-center sm:gap-x-12">
+          {items.map((item) => (
+            <div key={`${item.value}-${item.label}`} className="min-w-[9rem]">
+              <p className="font-display text-3xl font-bold text-signal-red sm:text-4xl">
+                {item.value}
+              </p>
+              <p
+                className={cn(
+                  "mt-2 text-sm",
+                  sectionTheme === "dark" ? "text-warm-ivory/70" : "text-muted",
+                )}
+              >
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+      {isMetrics && section.media?.[0] && (
+        <div className="mx-auto mt-10 max-w-3xl">
+          <MediaBlock media={section.media[0]} />
+        </div>
+      )}
     </SectionShell>
   );
 }
@@ -346,7 +381,14 @@ function renderSection(section: ContentSection) {
   const key = section.key;
   const type = section.type;
 
-  if (key === "trust-strip" || type === "trust-strip" || type === "stats") {
+  if (
+    key === "trust-strip" ||
+    type === "trust-strip" ||
+    type === "stats" ||
+    type === "metrics" ||
+    key === "impact-metrics" ||
+    type === "impact-metrics"
+  ) {
     return <TrustStrip key={key} section={section} />;
   }
   if (key === "core-values" || type === "values" || type === "cards") {
@@ -365,11 +407,11 @@ function renderSection(section: ContentSection) {
   if (type === "video-showcase" || type === "video-grid") {
     return <VideoShowcaseSection key={key} section={section} />;
   }
+  if (type === "rich-text" && key === "intro") {
+    return <GenericSection key={key} section={{ ...section, theme: section.theme ?? "ivory" }} />;
+  }
   if (key === "cta-final" || type === "cta" || type === "cta-band" || type === "banner") {
     return <CtaBanner key={key} section={section} />;
-  }
-  if (type === "impact-metrics" || key === "impact-metrics") {
-    return <TrustStrip key={key} section={section} />;
   }
 
   return <GenericSection key={key} section={section} />;

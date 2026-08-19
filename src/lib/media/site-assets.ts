@@ -42,6 +42,16 @@ export function siteImagePath(n: number): string {
   return `/images/pic${n}.jpeg`;
 }
 
+/** Alternate paths when the primary JPEG URL fails (e.g. legacy assets without extension). */
+export function siteImageFallbackSrcs(src: string): string[] {
+  const fallbacks = [src];
+  if (src.endsWith(".jpeg")) {
+    const withoutExt = src.slice(0, -5);
+    if (!fallbacks.includes(withoutExt)) fallbacks.push(withoutExt);
+  }
+  return fallbacks;
+}
+
 export function siteImageRef(n: number, alt: string): MediaRef {
   return {
     src: siteImagePath(n),

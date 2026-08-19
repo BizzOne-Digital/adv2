@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SiteImage } from "@/components/site/site-image";
 
 export type GalleryImage = {
   src: string;
@@ -38,12 +38,12 @@ export function GalleryGrid({ images, className }: GalleryGridProps) {
               i % 7 === 0 && "sm:col-span-2 sm:aspect-[16/10]",
             )}
           >
-            <Image
+            <SiteImage
               src={image.src}
               alt={image.alt}
-              fill
               sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              priority={i === 0}
             />
             <span className="absolute inset-0 bg-near-black/0 transition group-hover:bg-near-black/20" />
           </button>
@@ -70,10 +70,9 @@ export function GalleryGrid({ images, className }: GalleryGridProps) {
             className="relative h-[70vh] w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
+            <SiteImage
               src={active.src}
               alt={active.alt}
-              fill
               className="object-contain"
               sizes="100vw"
               priority
