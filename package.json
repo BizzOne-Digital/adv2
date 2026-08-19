@@ -13,6 +13,8 @@
     "test:e2e": "playwright test",
     "seed": "tsx src/seed/index.ts",
     "publish-services": "tsx src/seed/publish-services.ts",
+    "update-events": "tsx src/seed/update-events.ts",
+    "update-leadership": "tsx src/seed/update-leadership.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

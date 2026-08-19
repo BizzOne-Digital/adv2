@@ -1,15 +1,17 @@
-import { getPublishedServices } from "@/services/content";
+import { getPublishedServices, getPublishedEvents } from "@/services/content";
 import { getEnv } from "@/lib/env";
 
 export default async function sitemap() {
   const { siteUrl } = getEnv();
   const services = await getPublishedServices();
+  const events = await getPublishedEvents();
 
   const staticRoutes = [
     "",
     "/about",
     "/services",
     "/gallery",
+    "/events",
     "/testimonials",
     "/faqs",
     "/contact",
@@ -30,6 +32,10 @@ export default async function sitemap() {
     })),
     ...services.map((s) => ({
       url: `${siteUrl}/services/${s.slug}`,
+      lastModified: new Date(),
+    })),
+    ...events.map((e) => ({
+      url: `${siteUrl}/events/${e.slug}`,
       lastModified: new Date(),
     })),
   ];

@@ -11,3 +11,4 @@ export { Product, PricingCard } from "./Product";
 export { MediaAsset } from "./MediaAsset";
 export { SiteSettings } from "./SiteSettings";
 export { ActivityLog } from "./ActivityLog";
+export { Event } from "./Event";

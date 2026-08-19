@@ -19,9 +19,12 @@ import {
   BlogPost,
   TeamMember,
   PricingCard,
+  Event,
 } from "@/models";
 import { PAGE_DEFINITIONS } from "./pages-data";
 import { TESTIMONIAL_SEEDS } from "./testimonials-data";
+import { EVENT_SEEDS } from "./events-data";
+import { LEADERSHIP_SEEDS, LEADERSHIP_SLUGS, LEGACY_TEAM_PLACEHOLDER_SLUGS } from "./leadership-data";
 import type { MediaRef } from "@/types";
 import { siteImagePath, siteImageRef } from "@/lib/media/site-assets";
 
@@ -815,63 +818,50 @@ async function seedBlogPosts(adminId?: Types.ObjectId) {
   console.log(`  Blog posts: ${created} created, ${skipped} already existed`);
 }
 
-const TEAM_SEEDS = [
-  {
-    name: "Executive Director (Placeholder)",
-    role: "Executive Director",
-    shortBio: "Draft profile — add name, photo, and bio before publishing.",
-    isLeadership: true,
-  },
-  {
-    name: "Programs Manager (Placeholder)",
-    role: "Programs Manager",
-    shortBio: "Draft profile pending real team member information.",
-    isLeadership: true,
-  },
-  {
-    name: "Community Coordinator (Placeholder)",
-    role: "Community Coordinator",
-    shortBio: "Draft profile — unpublished until approved.",
-    isLeadership: false,
-  },
-  {
-    name: "Volunteer Lead (Placeholder)",
-    role: "Volunteer Lead",
-    shortBio: "Draft profile for volunteer coordination lead.",
-    isLeadership: false,
-  },
-];
+const TEAM_SEEDS = LEADERSHIP_SEEDS;
 
 async function seedTeamMembers(adminId?: Types.ObjectId) {
   let created = 0;
-  let skipped = 0;
+  let updated = 0;
 
-  for (let i = 0; i < TEAM_SEEDS.length; i++) {
-    const member = TEAM_SEEDS[i];
-    const slug = slugify(member.name);
-    const exists = await TeamMember.findOne({ slug });
+  await TeamMember.updateMany(
+    { slug: { $in: LEGACY_TEAM_PLACEHOLDER_SLUGS } },
+    { $set: { isDeleted: true, status: "archived" } },
+  );
+
+  await TeamMember.deleteMany({ slug: { $nin: LEADERSHIP_SLUGS } });
+
+  for (const member of TEAM_SEEDS) {
+    const exists = await TeamMember.findOne({ slug: member.slug });
+    const payload = {
+      name: member.name,
+      role: member.role,
+      shortBio: member.shortBio,
+      fullBioHtml: `<p>${member.shortBio}</p>`,
+      photo: member.photo,
+      isLeadership: true,
+      featured: true,
+      order: member.order,
+      status: "published" as const,
+      isDeleted: false,
+      ...(adminId ? { updatedBy: adminId } : {}),
+    };
+
     if (exists) {
-      skipped++;
+      await TeamMember.updateOne({ _id: exists._id }, { $set: payload });
+      updated++;
       continue;
     }
 
     await TeamMember.create({
-      name: member.name,
-      slug,
-      role: member.role,
-      shortBio: member.shortBio,
-      fullBioHtml: `<p>${member.shortBio}</p>`,
-      photo: placeholderImage(i + 1, `${member.name} photo placeholder`),
-      isLeadership: member.isLeadership,
-      featured: member.isLeadership,
-      order: i + 1,
-      status: "draft",
-      ...(adminId ? { createdBy: adminId, updatedBy: adminId } : {}),
+      slug: member.slug,
+      ...payload,
+      ...(adminId ? { createdBy: adminId } : {}),
     });
     created++;
   }
 
-  console.log(`  Team members: ${created} created, ${skipped} already existed`);
+  console.log(`  Leadership team: ${created} created, ${updated} updated`);
 }
 
 const PRICING_CARD_SEEDS = [
@@ -932,6 +922,67 @@ async function seedPricingCards(adminId?: Types.ObjectId) {
   console.log(`  Pricing cards: ${created} created, ${skipped} already existed`);
 }
 
+async function seedEvents(adminId?: Types.ObjectId) {
+  let created = 0;
+  let skipped = 0;
+
+  for (const data of EVENT_SEEDS) {
+    const exists = await Event.findOne({ slug: data.slug });
+    if (exists) {
+      await Event.updateOne(
+        { _id: exists._id },
+        {
+          $set: {
+            title: data.title,
+            shortDescription: data.shortDescription,
+            descriptionHtml: data.descriptionHtml,
+            startDate: new Date(data.startDate),
+            endDate: data.endDate ? new Date(data.endDate) : undefined,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            location: data.location,
+            address: data.address,
+            city: data.city ?? "Toronto",
+            image: data.image,
+            isFree: data.isFree ?? true,
+            featured: data.featured ?? false,
+            order: data.order,
+            status: "published",
+            isDeleted: false,
+            ...(adminId ? { updatedBy: adminId } : {}),
+          },
+        },
+      );
+      skipped++;
+      continue;
+    }
+
+    await Event.create({
+      title: data.title,
+      slug: data.slug,
+      shortDescription: data.shortDescription,
+      descriptionHtml: data.descriptionHtml,
+      startDate: new Date(data.startDate),
+      endDate: data.endDate ? new Date(data.endDate) : undefined,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      location: data.location,
+      address: data.address,
+      city: data.city ?? "Toronto",
+      province: "Ontario",
+      image: data.image,
+      isFree: data.isFree ?? true,
+      featured: data.featured ?? false,
+      order: data.order,
+      status: "published",
+      ...(adminId ? { createdBy: adminId, updatedBy: adminId } : {}),
+    });
+    created++;
+  }
+
+  console.log(`  Events: ${created} created, ${skipped} already existed`);
+}
+
 export async function seed(): Promise<void> {
   console.log("Connecting to MongoDB…");
   await connectDB();
@@ -948,6 +999,7 @@ export async function seed(): Promise<void> {
   await seedBlogPosts(adminId);
   await seedTeamMembers(adminId);
   await seedPricingCards(adminId);
+  await seedEvents(adminId);
 
   console.log("\nCurrent database totals:");
   console.log(`  Pages: ${await Page.countDocuments()}`);
@@ -957,6 +1009,7 @@ export async function seed(): Promise<void> {
   console.log(`  Gallery items: ${await GalleryItem.countDocuments()}`);
   console.log(`  Blog posts: ${await BlogPost.countDocuments()}`);
   console.log(`  Team members: ${await TeamMember.countDocuments()}`);
+  console.log(`  Events: ${await Event.countDocuments()}`);
   console.log(`  Users: ${await User.countDocuments()}`);
 
   console.log("\nSeed completed.");

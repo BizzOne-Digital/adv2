@@ -982,7 +982,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
         type: "rich-text",
         internalLabel: "Team intro",
         bodyHtml:
-          "<p>Team profiles are published when photos and bios are approved. Placeholder entries remain in draft until real information is supplied.</p>",
+          "<p>Our leadership team guides programs, partnerships, and community initiatives across Ontario. Meet the people who steward our mission to bring light and belonging to every newcomer.</p>",
         isVisible: true,
         order: 0,
         animation: "fade",

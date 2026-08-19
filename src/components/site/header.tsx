@@ -32,6 +32,7 @@ function buildMainNav(services: NavService[]): NavItem[] {
     { label: "About", href: "/about" },
     { label: "Services", href: "/services", children: services },
     { label: "Gallery", href: "/gallery" },
+    { label: "Events", href: "/events" },
     { label: "Stories", href: "/testimonials" },
     { label: "Contact", href: "/contact" },
   ];

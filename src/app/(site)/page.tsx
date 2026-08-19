@@ -2,6 +2,7 @@ import {
   getPublishedPage,
   getPublishedServices,
   getPublishedTestimonials,
+  getUpcomingEvents,
 } from "@/services/content";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { HomeHero } from "@/components/site/home-hero";
@@ -15,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/motion/reveal-on-scroll";
 import { pickSiteImages, siteVideosAsMedia } from "@/lib/media/site-assets";
+import { BbqFestivalSection } from "@/components/site/bbq-festival-section";
+import { UpcomingEventsSection } from "@/components/site/upcoming-events-section";
 
 export async function generateMetadata() {
   const page = await getPublishedPage("home");
@@ -27,10 +30,11 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [page, services, testimonials] = await Promise.all([
+  const [page, services, testimonials, upcomingEvents] = await Promise.all([
     getPublishedPage("home"),
     getPublishedServices({ featured: true }),
     getPublishedTestimonials(6),
+    getUpcomingEvents(6),
   ]);
 
   const hero = page?.hero as Record<string, string> | undefined;
@@ -91,6 +95,10 @@ export default async function HomePage() {
             ["who-we-are", "core-values"].includes(String(s.key)),
           )}
         />
+
+        <BbqFestivalSection />
+
+        <UpcomingEventsSection events={upcomingEvents} />
 
         <section className="section-ivory py-12 sm:py-16 lg:py-24">
           <Container>

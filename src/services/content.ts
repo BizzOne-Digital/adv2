@@ -9,7 +9,9 @@ import { TeamMember } from "@/models/TeamMember";
 import { BlogPost } from "@/models/BlogPost";
 import { Booking, Inquiry } from "@/models/Booking";
 import { Product, PricingCard } from "@/models/Product";
+import { Event } from "@/models/Event";
 import { serializeDoc } from "@/lib/db/serialize";
+import { startOfTodayUtc } from "@/lib/events/format";
 import type { PublishStatus } from "@/types";
 
 export async function getSiteSettings() {
@@ -136,6 +138,18 @@ export async function getPublishedTeam() {
   return members.map((m) => serializeDoc(m as never)!);
 }
 
+export async function getLeadershipTeam() {
+  await connectDB();
+  const members = await TeamMember.find({
+    status: "published",
+    isDeleted: { $ne: true },
+    isLeadership: true,
+  })
+    .sort({ order: 1 })
+    .lean();
+  return members.map((m) => serializeDoc(m as never)!);
+}
+
 export async function getPublishedBlogPosts(options?: {
   page?: number;
   limit?: number;
@@ -210,6 +224,54 @@ export async function getPricingCards() {
     .sort({ order: 1 })
     .lean();
   return cards.map((c) => serializeDoc(c as never)!);
+}
+
+export async function getUpcomingEvents(limit?: number) {
+  await connectDB();
+  const today = startOfTodayUtc();
+  let query = Event.find({
+    status: "published",
+    isDeleted: { $ne: true },
+    startDate: { $gte: today },
+  }).sort({ startDate: 1, order: 1 });
+  if (limit) query = query.limit(limit);
+  const events = await query.lean();
+  return events.map((e) => serializeDoc(e as never)!);
+}
+
+export async function getPastEvents(limit = 12) {
+  await connectDB();
+  const today = startOfTodayUtc();
+  const events = await Event.find({
+    status: "published",
+    isDeleted: { $ne: true },
+    startDate: { $lt: today },
+  })
+    .sort({ startDate: -1 })
+    .limit(limit)
+    .lean();
+  return events.map((e) => serializeDoc(e as never)!);
+}
+
+export async function getEventBySlug(slug: string) {
+  await connectDB();
+  const event = await Event.findOne({
+    slug,
+    status: "published",
+    isDeleted: { $ne: true },
+  }).lean();
+  return serializeDoc(event as never);
+}
+
+export async function getPublishedEvents() {
+  await connectDB();
+  const events = await Event.find({
+    status: "published",
+    isDeleted: { $ne: true },
+  })
+    .sort({ startDate: 1, order: 1 })
+    .lean();
+  return events.map((e) => serializeDoc(e as never)!);
 }
 
 export async function getDashboardStats() {
