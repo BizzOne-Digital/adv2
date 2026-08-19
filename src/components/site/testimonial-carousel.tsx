@@ -3,10 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MediaRef } from "@/types";
 
 type TestimonialCarouselProps = {
   testimonials: Array<Record<string, unknown>>;
@@ -53,7 +51,6 @@ export function TestimonialCarousel({
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {testimonials.map((item) => {
-            const avatar = item.avatar as MediaRef | undefined;
             const name = String(item.personName ?? "Community member");
             const role = item.role ? String(item.role) : undefined;
             const quote = String(item.quote ?? "");
@@ -68,25 +65,9 @@ export function TestimonialCarousel({
                   <p className="font-display mt-4 text-lg leading-relaxed text-near-black sm:text-xl lg:text-2xl">
                     &ldquo;{quote}&rdquo;
                   </p>
-                  <figcaption className="mt-8 flex items-center gap-4">
-                    <div className="relative size-12 overflow-hidden rounded-full bg-charcoal/10">
-                      {avatar?.src ? (
-                        <Image
-                          src={avatar.src}
-                          alt={avatar.alt || name}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <span className="flex size-full items-center justify-center text-sm font-bold text-signal-red">
-                          {name.charAt(0)}
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <cite className="not-italic font-semibold text-near-black">{name}</cite>
-                      {role && <p className="text-muted text-sm">{role}</p>}
-                    </div>
+                  <figcaption className="mt-8">
+                    <cite className="not-italic font-semibold text-near-black">{name}</cite>
+                    {role && <p className="text-muted text-sm">{role}</p>}
                   </figcaption>
                 </blockquote>
               </figure>

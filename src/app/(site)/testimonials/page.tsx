@@ -18,7 +18,9 @@ export default async function TestimonialsPage() {
     getPublishedTestimonials(),
   ]);
   const hero = page?.hero as Record<string, string> | undefined;
-  const sections = (page?.sections as Record<string, unknown>[]) ?? [];
+  const sections = ((page?.sections as Record<string, unknown>[]) ?? []).filter(
+    (s) => !["testimonials-intro", "testimonials-slider"].includes(String(s.key)),
+  );
 
   return (
     <>

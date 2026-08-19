@@ -42,6 +42,11 @@ export default async function ServicesPage({ searchParams }: Props) {
 
   const hero = page.hero as Record<string, string> | undefined;
   const sections = (page.sections as Record<string, unknown>[]) ?? [];
+  const introSection = sections.find((s) => s.key === "intro");
+  const footerSections = sections.filter(
+    (s) =>
+      !["intro", "category-filters", "services-grid"].includes(String(s.key)),
+  );
 
   return (
     <>
@@ -51,7 +56,8 @@ export default async function ServicesPage({ searchParams }: Props) {
         subheading={hero?.subheading}
         compact
       />
-      <section className="py-12 sm:py-16">
+      {introSection && <ContentSectionRenderer sections={[introSection]} />}
+      <section className="section-ivory py-12 sm:py-16">
         <Container>
           <Suspense fallback={<div className="h-12 animate-pulse rounded-full bg-white" />}>
             <ServicesFilter categories={categories} />
@@ -68,7 +74,7 @@ export default async function ServicesPage({ searchParams }: Props) {
           )}
         </Container>
       </section>
-      <ContentSectionRenderer sections={sections} />
+      <ContentSectionRenderer sections={footerSections} />
     </>
   );
 }

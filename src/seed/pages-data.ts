@@ -99,8 +99,10 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
         internalLabel: "Trust strip",
         eyebrow: "Community-led support",
         heading: "Rooted in Ontario, open to all",
-        bodyHtml:
-          "<p>Programs shaped with immigrants, families, youth, seniors, volunteers, and partner organizations.</p>",
+        subheading:
+          "Programs shaped with immigrants, families, youth, seniors, volunteers, and partner organizations.",
+        bodyHtml: "",
+        theme: "dark",
         isVisible: true,
         order: 0,
         animation: "fade",
@@ -155,9 +157,15 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
         type: "metrics",
         internalLabel: "Impact metrics",
         eyebrow: "Community impact",
-        heading: "Growing together — placeholder figures",
-        bodyHtml:
-          "<p><em>Editable seed placeholders until verified numbers are supplied by the organization.</em></p><ul><li><strong>500+</strong> orientation conversations</li><li><strong>120+</strong> workshops delivered</li><li><strong>40+</strong> community partners</li><li><strong>15</strong> languages supported in referrals</li></ul>",
+        heading: "Growing together across Ontario",
+        subheading:
+          "Community-led programs that welcome newcomers, strengthen families, and build lasting connections.",
+        bodyHtml: JSON.stringify([
+          { value: "500+", label: "Orientation conversations" },
+          { value: "120+", label: "Workshops delivered" },
+          { value: "40+", label: "Community partners" },
+          { value: "15+", label: "Languages supported in referrals" },
+        ]),
         media: [img(5, "Community celebration with diverse families")],
         isVisible: true,
         order: 4,
@@ -598,25 +606,6 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
     },
     sections: [
       {
-        key: "testimonials-intro",
-        type: "rich-text",
-        internalLabel: "Testimonials intro",
-        bodyHtml:
-          "<p>These stories come from newcomers, families, youth, seniors, and volunteers who have walked alongside Light for Immigrants in Ontario. Each voice reflects a real journey toward confidence, connection, and belonging.</p>",
-        isVisible: true,
-        order: 0,
-        animation: "fade",
-      },
-      {
-        key: "testimonials-slider",
-        type: "testimonials-slider",
-        internalLabel: "Main slider",
-        heading: "What community members share",
-        isVisible: true,
-        order: 1,
-        animation: "stagger",
-      },
-      {
         key: "community-stories",
         type: "story-grid",
         internalLabel: "Community stories",
@@ -628,7 +617,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
           img(18, "Family at a community event"),
         ],
         isVisible: true,
-        order: 2,
+        order: 0,
         animation: "from-right",
       },
       {
@@ -640,7 +629,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
           "<p>If Light for Immigrants has supported your journey, we welcome your story — with your consent and approval before anything is published.</p>",
         primaryCta: { label: "Contact us", href: "/contact" },
         isVisible: true,
-        order: 3,
+        order: 1,
         animation: "from-left",
       },
       {
@@ -652,7 +641,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
         secondaryCta: { label: "Get support", href: "/booking" },
         theme: "red",
         isVisible: true,
-        order: 4,
+        order: 2,
         animation: "fade",
       },
     ],
@@ -784,7 +773,7 @@ export const PAGE_DEFINITIONS: PageSeedDefinition[] = [
           img(3, "Office welcome area"),
           img(4, "Community phone support"),
           img(5, "Map and directions"),
-          img(1, "Team at reception"),
+          img(6, "Team at reception"),
           img(2, "Multilingual resources"),
         ],
         layout: "ribbon",

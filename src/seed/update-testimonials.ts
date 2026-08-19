@@ -44,15 +44,18 @@ async function updateTestimonials() {
     { slug: "testimonials" },
     {
       $set: {
-        "sections.$[intro].bodyHtml":
-          "<p>These stories come from newcomers, families, youth, seniors, and volunteers who have walked alongside Light for Immigrants in Ontario. Each voice reflects a real journey toward confidence, connection, and belonging.</p>",
+        "sections.$[intro].isVisible": false,
+        "sections.$[slider].isVisible": false,
       },
     },
     {
-      arrayFilters: [{ "intro.key": "testimonials-intro" }],
+      arrayFilters: [
+        { "intro.key": "testimonials-intro" },
+        { "slider.key": "testimonials-slider" },
+      ],
     },
   );
-  console.log("✓ Testimonials page intro updated");
+  console.log("✓ Hidden testimonials intro and slider sections on testimonials page");
 }
 
 updateTestimonials()

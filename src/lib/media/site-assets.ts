@@ -52,6 +52,8 @@ export function siteImageFallbackSrcs(src: string): string[] {
   if (src.endsWith(".jpeg")) {
     const withoutExt = src.slice(0, -5);
     if (!fallbacks.includes(withoutExt)) fallbacks.push(withoutExt);
+  } else if (src === "/images/pic1" && !fallbacks.includes("/images/pic1.jpeg")) {
+    fallbacks.push("/images/pic1.jpeg");
   }
   return fallbacks;
 }

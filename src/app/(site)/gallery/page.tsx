@@ -51,19 +51,6 @@ export default async function GalleryPage() {
         subtitle="Watch highlights from welcome days, workshops, and community events."
         theme="dark"
       />
-
-      <section className="section-ivory py-12">
-        <Container className="max-w-3xl text-center">
-          <p className="text-muted text-sm leading-relaxed">
-            Images and videos are shared with permission from participants and partners.
-            For media inquiries, please{" "}
-            <a href="/contact" className="text-signal-red underline underline-offset-2">
-              contact our team
-            </a>
-            .
-          </p>
-        </Container>
-      </section>
     </>
   );
 }
