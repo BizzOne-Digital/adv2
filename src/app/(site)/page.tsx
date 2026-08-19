@@ -17,6 +17,8 @@ import Link from "next/link";
 import { RevealOnScroll } from "@/components/motion/reveal-on-scroll";
 import { pickSiteImages, siteVideosAsMedia } from "@/lib/media/site-assets";
 import { BbqFestivalSection } from "@/components/site/bbq-festival-section";
+import { FarmShowTripSection } from "@/components/site/farm-show-trip-section";
+import { OrganizationFlyerSection } from "@/components/site/organization-flyer-section";
 import { UpcomingEventsSection } from "@/components/site/upcoming-events-section";
 
 export async function generateMetadata() {
@@ -96,9 +98,13 @@ export default async function HomePage() {
           )}
         />
 
-        <BbqFestivalSection />
+        <OrganizationFlyerSection />
+
+        <FarmShowTripSection />
 
         <UpcomingEventsSection events={upcomingEvents} />
+
+        <BbqFestivalSection />
 
         <section className="section-ivory py-12 sm:py-16 lg:py-24">
           <Container>

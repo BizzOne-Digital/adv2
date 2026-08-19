@@ -10,7 +10,7 @@ const highlights = [
   "All nations are welcome",
   "Free BBQ food & drinks",
   "Family & community gathering",
-  "Everyone is welcome",
+  "Games and activities",
 ];
 
 export function BbqFestivalSection() {
@@ -20,15 +20,15 @@ export function BbqFestivalSection() {
         <div className="grid min-w-0 items-center gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-16">
           <RevealOnScroll animation="from-left" className="min-w-0">
             <SectionHeading
-              eyebrow="Past community highlight"
-              title="Light for Immigrants BBQ Festival"
+              eyebrow="Previous community highlight"
+              title="BBQ and Games Festival"
               subtitle="All immigrants across Ontario are warmly invited to celebrate diversity, culture, friendship, and community."
             />
 
             <p className="text-muted mt-6 text-base leading-relaxed">
-              Join us for a wonderful BBQ festival in the heart of Toronto — a free
-              gathering where neighbours share food, stories, and belonging. Come
-              together, celebrate our diversity, and build community.
+              We hosted a wonderful BBQ and games festival — a free gathering where neighbours
+              shared food, games, stories, and belonging. Come together, celebrate together, and
+              build community.
             </p>
 
             <ul className="mt-6 flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export function BbqFestivalSection() {
                     Date
                   </p>
                   <p className="font-display mt-1 text-lg font-bold text-near-black">
-                    July 4, 2026
+                    August 1, 2026
                   </p>
                 </div>
               </div>
@@ -61,31 +61,31 @@ export function BbqFestivalSection() {
                     Location
                   </p>
                   <p className="font-display mt-1 text-lg font-bold text-near-black">
-                    High Park, Toronto
+                    G Ross Lord Park
                   </p>
-                  <p className="text-muted text-sm">Ontario, Canada</p>
+                  <p className="text-muted text-sm">North York, Ontario M3H 5T3</p>
                 </div>
               </div>
             </div>
 
             <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-accent-gold">
               <Sparkles className="size-4" aria-hidden />
-              Free event — no admission fee
+              Free event — 10:00 AM – 8:00 PM
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Button asChild>
-                <Link href="/contact">Get event details</Link>
+                <Link href="/events/bbq-games-festival-2026">View event recap</Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/events/bbq-festival-2026">View BBQ event recap</Link>
+                <Link href="/events">All events</Link>
               </Button>
             </div>
 
             <p className="text-muted mt-6 flex items-start gap-2 text-sm leading-relaxed">
               <Users className="mt-0.5 size-4 shrink-0 text-signal-red" aria-hidden />
-              Past community gatherings like this BBQ help newcomers feel welcomed and
-              connected. Photos from our events are shared with participant consent.
+              Past community gatherings like this help newcomers feel welcomed and connected.
+              Photos are shared with participant consent.
             </p>
           </RevealOnScroll>
 
@@ -98,17 +98,16 @@ export function BbqFestivalSection() {
               <div className="relative overflow-hidden rounded-2xl border border-border bg-clean-white shadow-[0_24px_60px_rgba(9,9,9,0.12)]">
                 <div className="relative aspect-[3/4] sm:aspect-[4/5]">
                   <Image
-                    src="/images/bbq-festival.png"
-                    alt="Light for Immigrants BBQ Festival — free community BBQ at High Park, Toronto, celebrating diversity and belonging"
+                    src="/images/bbq-games-festival-2026.png"
+                    alt="Light for Immigrants BBQ and Games Festival — free community event, all nations welcome"
                     fill
                     className="object-cover object-top"
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority={false}
                   />
                 </div>
               </div>
               <p className="text-muted mt-4 text-center text-xs sm:text-left">
-                Light for Immigrants BBQ Festival — all nations welcome.
+                BBQ and Games Festival — all nations welcome.
               </p>
             </div>
           </RevealOnScroll>

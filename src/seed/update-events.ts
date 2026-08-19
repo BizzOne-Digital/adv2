@@ -27,8 +27,16 @@ function loadEnvFiles() {
 
 loadEnvFiles();
 
+const EVENT_SLUGS = EVENT_SEEDS.map((e) => e.slug);
+
 async function main() {
   await connectDB();
+
+  const removed = await Event.deleteMany({ slug: { $nin: EVENT_SLUGS } });
+  if (removed.deletedCount > 0) {
+    console.log(`✓ Removed ${removed.deletedCount} outdated event(s)`);
+  }
+
   let upserted = 0;
 
   for (const data of EVENT_SEEDS) {
