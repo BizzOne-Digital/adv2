@@ -2,10 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ArrowDown } from "lucide-react";
 import type { CtaLink } from "@/types";
+import {
+  NationalFlagsCycle,
+  NationalFlagsMarquee,
+} from "@/components/site/national-flags-cycle";
+import { NATIONAL_FLAGS } from "@/lib/media/national-flags";
 
 const DEFAULT_BG = "/images/hero-background.png";
 
@@ -31,6 +36,7 @@ export function HomeHero({
   const sectionRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [flagIndex, setFlagIndex] = useState(0);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -66,12 +72,14 @@ export function HomeHero({
     return () => ctx.revert();
   }, []);
 
+  const slideLabel = String(flagIndex + 1).padStart(2, "0");
+  const totalLabel = String(NATIONAL_FLAGS.length).padStart(2, "0");
+
   return (
     <section
       ref={sectionRef}
       className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-near-black text-warm-ivory"
     >
-      {/* Background photograph */}
       <div ref={mediaRef} className="absolute inset-0">
         <Image
           src={backgroundImage}
@@ -83,7 +91,6 @@ export function HomeHero({
         />
       </div>
 
-      {/* Cinematic grading: dark on the left so type stays legible */}
       <div
         className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/80 to-transparent"
         aria-hidden
@@ -94,7 +101,6 @@ export function HomeHero({
       />
       <div className="grain-overlay absolute inset-0 opacity-25" aria-hidden />
 
-      {/* Left rail with vertical journey label */}
       <div
         className="absolute inset-y-0 left-6 z-10 hidden w-px lg:block xl:left-10"
         aria-hidden
@@ -113,55 +119,65 @@ export function HomeHero({
         </p>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full min-w-0 max-w-7xl flex-col justify-center px-4 pb-28 pt-28 sm:px-6 sm:pb-32 sm:pt-32 lg:px-8">
-        <div ref={contentRef} className="min-w-0 max-w-2xl">
-          <p className="hero-fade mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent-gold sm:text-[11px]">
-            {eyebrow}
-          </p>
-
-          <h1 className="hero-fade font-hero text-[2rem] font-bold uppercase leading-[1.05] tracking-[0.03em] text-warm-ivory sm:text-5xl sm:leading-[1.02] sm:tracking-[0.04em] lg:text-[4.5rem]">
-            {heading}
-          </h1>
-
-          <div className="hero-fade mt-9 max-w-md border border-warm-ivory/20 bg-near-black/35 px-6 py-5 backdrop-blur-[2px]">
-            <p className="text-[0.95rem] leading-relaxed text-warm-ivory/85">
-              {subheading}
+      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full min-w-0 max-w-7xl flex-col justify-center px-4 pb-36 pt-28 sm:px-6 sm:pb-40 sm:pt-32 lg:px-8">
+        <div className="grid min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
+          <div ref={contentRef} className="min-w-0 max-w-2xl">
+            <p className="hero-fade mb-6 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent-gold sm:text-[11px]">
+              {eyebrow}
             </p>
+
+            <h1 className="hero-fade font-hero text-[2rem] font-bold uppercase leading-[1.05] tracking-[0.03em] text-warm-ivory sm:text-5xl sm:leading-[1.02] sm:tracking-[0.04em] lg:text-[4.5rem]">
+              {heading}
+            </h1>
+
+            <div className="hero-fade mt-9 max-w-md border border-warm-ivory/20 bg-near-black/35 px-6 py-5 backdrop-blur-[2px]">
+              <p className="text-[0.95rem] leading-relaxed text-warm-ivory/85">
+                {subheading}
+              </p>
+            </div>
+
+            <div className="hero-fade mt-9 flex flex-wrap gap-4">
+              <Link
+                href={primaryCta.href}
+                className="inline-flex items-center justify-center rounded-md bg-signal-red px-8 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white shadow-[0_10px_40px_rgba(226,29,46,0.35)] transition hover:bg-deep-crimson"
+              >
+                {primaryCta.label}
+              </Link>
+              <Link
+                href={secondaryCta.href}
+                className="inline-flex items-center justify-center rounded-md border border-warm-ivory/50 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-warm-ivory transition hover:border-warm-ivory hover:bg-warm-ivory/10"
+              >
+                {secondaryCta.label}
+              </Link>
+            </div>
           </div>
 
-          <div className="hero-fade mt-9 flex flex-wrap gap-4">
-            <Link
-              href={primaryCta.href}
-              className="inline-flex items-center justify-center rounded-md bg-signal-red px-8 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white shadow-[0_10px_40px_rgba(226,29,46,0.35)] transition hover:bg-deep-crimson"
-            >
-              {primaryCta.label}
-            </Link>
-            <Link
-              href={secondaryCta.href}
-              className="inline-flex items-center justify-center rounded-md border border-warm-ivory/50 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-warm-ivory transition hover:border-warm-ivory hover:bg-warm-ivory/10"
-            >
-              {secondaryCta.label}
-            </Link>
+          <div className="hero-fade flex justify-center lg:justify-end">
+            <NationalFlagsCycle onIndexChange={setFlagIndex} />
           </div>
         </div>
       </div>
 
-      {/* Scroll cue */}
       <a
         href="#home-content"
-        className="absolute bottom-20 left-4 z-20 flex size-11 items-center justify-center rounded-full border border-warm-ivory/30 text-warm-ivory/75 transition hover:border-signal-red hover:text-signal-red sm:bottom-24 sm:left-6 lg:bottom-28"
+        className="absolute bottom-24 left-4 z-20 flex size-11 items-center justify-center rounded-full border border-warm-ivory/30 text-warm-ivory/75 transition hover:border-signal-red hover:text-signal-red sm:bottom-28 sm:left-6"
         aria-label="Scroll to content"
       >
         <ArrowDown className="size-4" />
       </a>
 
-      {/* Slide counter */}
-      <div className="absolute bottom-20 right-4 z-20 flex items-center gap-3 sm:bottom-24 sm:right-6 lg:bottom-28">
-        <span className="font-display text-xl font-bold text-signal-red">01</span>
+      <div
+        className="absolute bottom-24 right-4 z-20 flex items-center gap-3 sm:bottom-28 sm:right-6"
+        aria-live="polite"
+      >
+        <span className="font-display text-xl font-bold text-signal-red">{slideLabel}</span>
         <span className="h-px w-10 bg-signal-red/70" aria-hidden />
+        <span className="text-sm font-medium text-warm-ivory/50">{totalLabel}</span>
       </div>
 
+      <div className="absolute inset-x-0 bottom-0 z-20">
+        <NationalFlagsMarquee />
+      </div>
     </section>
   );
 }

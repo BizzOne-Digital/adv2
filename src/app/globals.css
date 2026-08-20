@@ -262,3 +262,23 @@ canvas {
   max-width: 100%;
   min-width: 0;
 }
+
+@keyframes flag-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-flag-marquee {
+  animation: flag-marquee 28s linear infinite;
+  width: max-content;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flag-marquee {
+    animation: none;
+  }
+}
