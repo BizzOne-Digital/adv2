@@ -38,6 +38,12 @@ export const SITE_VIDEOS: SiteVideo[] = [
     title: "Together in community",
     poster: "/images/pic4.jpeg",
   },
+  {
+    src: "/videos/vid4.mp4",
+    alt: "Light for Immigrants community programs and events",
+    title: "Programs in action",
+    poster: "/images/pic5.jpeg",
+  },
 ];
 
 export const HERO_BACKGROUND = "/images/hero-background.png";

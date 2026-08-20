@@ -18,6 +18,7 @@
     "update-home-sections": "tsx src/seed/update-home-sections.ts",
     "update-pic1-paths": "tsx src/seed/update-pic1-paths.ts",
     "update-contact-photo": "tsx src/seed/update-contact-photo.ts",
+    "update-site-videos": "tsx src/seed/update-site-videos.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

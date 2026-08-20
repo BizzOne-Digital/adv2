@@ -4,16 +4,20 @@ export type NationalFlag = {
   welcome: string;
 };
 
-/** Representative nations — cycles on the home hero (all nations welcome). */
+/** Nations shown on the home hero flag cycle (client-provided set). */
 export const NATIONAL_FLAGS: NationalFlag[] = [
-  { code: "ca", name: "Canada", welcome: "Welcome home in Canada" },
+  { code: "tz", name: "Tanzania", welcome: "Tanzanian community welcome" },
+  { code: "gh", name: "Ghana", welcome: "Ghanaian neighbours welcome" },
   { code: "ng", name: "Nigeria", welcome: "Nigerian community welcome" },
-  { code: "pk", name: "Pakistan", welcome: "Pakistani neighbours welcome" },
-  { code: "in", name: "India", welcome: "Indian families welcome" },
-  { code: "jm", name: "Jamaica", welcome: "Jamaican voices welcome" },
-  { code: "ph", name: "Philippines", welcome: "Filipino friends welcome" },
+  { code: "tr", name: "Türkiye", welcome: "Turkish newcomers welcome" },
   { code: "et", name: "Ethiopia", welcome: "Ethiopian community welcome" },
-  { code: "sy", name: "Syria", welcome: "Syrian newcomers welcome" },
+  { code: "ke", name: "Kenya", welcome: "Kenyan voices welcome" },
+  { code: "ug", name: "Uganda", welcome: "Ugandan families welcome" },
+  { code: "id", name: "Indonesia", welcome: "Indonesian friends welcome" },
+  { code: "so", name: "Somalia", welcome: "Somali community welcome" },
+  { code: "ao", name: "Angola", welcome: "Angolan neighbours welcome" },
+  { code: "cm", name: "Cameroon", welcome: "Cameroonian community welcome" },
+  { code: "bw", name: "Botswana", welcome: "Botswanan voices welcome" },
 ];
 
 export function flagImageUrl(code: string, width = 320): string {
