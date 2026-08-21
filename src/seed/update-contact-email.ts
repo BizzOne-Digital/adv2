@@ -27,22 +27,34 @@ function loadEnvFiles() {
 loadEnvFiles();
 
 const NEW_EMAIL = "info@lightimmigrants.ca";
+const LEGACY_EMAILS = ["firstimmigrants@gmail.com", "lightforimmigrants@gmail.com"];
 
 async function main() {
   await connectDB();
 
+  const settings = await SiteSettings.findOne({ singletonKey: "main" }).lean();
+  if (!settings) {
+    console.log("No SiteSettings document found — run npm run seed first");
+    return;
+  }
+
+  const updates: Record<string, string> = {
+    "contact.primaryEmail": NEW_EMAIL,
+    "contact.emailLaunchWarning": "",
+  };
+
+  const secondary = settings.contact?.secondaryEmail;
+  if (secondary && LEGACY_EMAILS.some((legacy) => secondary.toLowerCase().includes(legacy))) {
+    updates["contact.secondaryEmail"] = "";
+  }
+
   await SiteSettings.findOneAndUpdate(
-    {},
-    {
-      $set: {
-        "contact.primaryEmail": NEW_EMAIL,
-        "contact.emailLaunchWarning": "",
-      },
-    },
-    { upsert: true },
+    { singletonKey: "main" },
+    { $set: updates },
   );
 
-  console.log(`✓ Site contact email updated to ${NEW_EMAIL}`);
+  const before = settings.contact?.primaryEmail ?? "(empty)";
+  console.log(`✓ Site contact email: ${before} → ${NEW_EMAIL}`);
 }
 
 main()
