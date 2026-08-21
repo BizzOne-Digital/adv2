@@ -313,11 +313,10 @@ async function seedSiteSettings(adminId?: Types.ObjectId) {
       favicon: "/favicon.ico",
     },
     contact: {
-      primaryEmail: "firstimmigrants@gmail.com",
+      primaryEmail: "info@lightimmigrants.ca",
       phone: "+1 437 873 7675",
       address: "163 Queen St E, Toronto, ON M5A 1S1, Canada",
-      emailLaunchWarning:
-        "Replace firstimmigrants@gmail.com with your final domain email before launch.",
+      emailLaunchWarning: "",
       officeHours: [{ label: "Monday – Friday", hours: "9:00 AM – 5:00 PM" }],
     },
     actions: {

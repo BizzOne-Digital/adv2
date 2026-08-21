@@ -111,7 +111,7 @@ export function FarmShowTripSection() {
 
             <p className="mt-6 flex items-start gap-2 text-sm leading-relaxed text-warm-ivory/70">
               <Users className="mt-0.5 size-4 shrink-0 text-accent-gold" aria-hidden />
-              Questions? Email firstimmigrants@gmail.com or call 437-873-7675 (9:00 AM – 5:00 PM).
+              Questions? Email info@lightimmigrants.ca or call 437-873-7675 (9:00 AM – 5:00 PM).
             </p>
           </RevealOnScroll>
 

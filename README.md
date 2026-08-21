@@ -49,7 +49,23 @@ See `.env.example`. Required for development:
 | `ADMIN_SEED_EMAIL` | First admin email (seed only) |
 | `ADMIN_SEED_PASSWORD` | First admin password (seed only, never commit) |
 
-Optional SMTP variables enable email notifications for inquiries (database storage always works).
+Optional SMTP variables send email notifications when contact or booking forms are submitted (database storage always works).
+
+| Variable | Description |
+|----------|-------------|
+| `SMTP_HOST` | e.g. `smtp.hostinger.com` |
+| `SMTP_PORT` | `465` (SSL) or `587` (TLS) |
+| `SMTP_SECURE` | `true` for port 465, `false` for 587 |
+| `SMTP_USER` | Full mailbox address, e.g. `info@lightimmigrants.ca` |
+| `SMTP_PASSWORD` | Mailbox password (never commit) |
+| `SMTP_FROM` | Sender address (usually same as `SMTP_USER`) |
+| `SMTP_TO` | Inbox for form notifications (defaults to `SMTP_FROM`) |
+
+Test SMTP after configuring `.env.local`:
+
+```bash
+npm run test-smtp
+```
 
 ## Scripts
 

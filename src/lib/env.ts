@@ -25,9 +25,11 @@ export function getEnv() {
     smtp: {
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
+      secure: process.env.SMTP_SECURE !== "false",
       user: process.env.SMTP_USER,
       password: process.env.SMTP_PASSWORD,
       from: process.env.SMTP_FROM,
+      to: process.env.SMTP_TO,
     },
   };
 }

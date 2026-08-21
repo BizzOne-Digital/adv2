@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db/connect";
 import { Booking } from "@/models/Booking";
 import { bookingSchema } from "@/lib/validation/schemas";
 import { rateLimit, getClientIp } from "@/lib/auth/rate-limit";
+import { notifyBookingReceived } from "@/lib/email/notifications";
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
@@ -23,6 +24,11 @@ export async function POST(request: Request) {
 
     await connectDB();
     await Booking.create({
+      ...parsed.data,
+      serviceName: body.serviceName,
+    });
+
+    await notifyBookingReceived({
       ...parsed.data,
       serviceName: body.serviceName,
     });

@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db/connect";
 import { Inquiry } from "@/models/Booking";
 import { contactSchema } from "@/lib/validation/schemas";
 import { rateLimit, getClientIp } from "@/lib/auth/rate-limit";
+import { notifyInquiryReceived } from "@/lib/email/notifications";
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
@@ -31,6 +32,8 @@ export async function POST(request: Request) {
       message: parsed.data.message,
       consent: parsed.data.consent,
     });
+
+    await notifyInquiryReceived(parsed.data);
 
     return NextResponse.json({ ok: true });
   } catch {

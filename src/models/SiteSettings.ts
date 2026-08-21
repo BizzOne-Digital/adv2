@@ -30,7 +30,7 @@ const SiteSettingsSchema = new Schema(
       },
     },
     contact: {
-      primaryEmail: { type: String, default: "firstimmigrants@gmail.com" },
+      primaryEmail: { type: String, default: "info@lightimmigrants.ca" },
       secondaryEmail: String,
       phone: { type: String, default: "+1 437 873 7675" },
       whatsapp: String,
@@ -48,8 +48,7 @@ const SiteSettingsSchema = new Schema(
       ],
       emailLaunchWarning: {
         type: String,
-        default:
-          "Replace firstimmigrants@gmail.com with your final domain email before launch.",
+        default: "",
       },
     },
     social: {
