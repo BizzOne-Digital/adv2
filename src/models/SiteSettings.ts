@@ -30,7 +30,7 @@ const SiteSettingsSchema = new Schema(
       },
     },
     contact: {
-      primaryEmail: { type: String, default: "info@lightimmigrants.ca" },
+      primaryEmail: { type: String, default: "info@immigrantslight.ca" },
       secondaryEmail: String,
       phone: { type: String, default: "+1 437 873 7675" },
       whatsapp: String,

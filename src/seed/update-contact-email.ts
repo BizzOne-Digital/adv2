@@ -26,8 +26,12 @@ function loadEnvFiles() {
 
 loadEnvFiles();
 
-const NEW_EMAIL = "info@lightimmigrants.ca";
-const LEGACY_EMAILS = ["firstimmigrants@gmail.com", "lightforimmigrants@gmail.com"];
+const NEW_EMAIL = "info@immigrantslight.ca";
+const LEGACY_EMAILS = [
+  "firstimmigrants@gmail.com",
+  "lightforimmigrants@gmail.com",
+  "info@lightimmigrants.ca",
+];
 
 async function main() {
   await connectDB();

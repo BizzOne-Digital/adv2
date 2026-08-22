@@ -313,7 +313,7 @@ async function seedSiteSettings(adminId?: Types.ObjectId) {
       favicon: "/favicon.ico",
     },
     contact: {
-      primaryEmail: "info@lightimmigrants.ca",
+      primaryEmail: "info@immigrantslight.ca",
       phone: "+1 437 873 7675",
       address: "163 Queen St E, Toronto, ON M5A 1S1, Canada",
       emailLaunchWarning: "",

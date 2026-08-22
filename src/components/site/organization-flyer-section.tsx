@@ -90,10 +90,10 @@ export function OrganizationFlyerSection() {
                     Email
                   </p>
                   <a
-                    href="mailto:info@lightimmigrants.ca"
+                    href="mailto:info@immigrantslight.ca"
                     className="mt-1 font-medium text-near-black"
                   >
-                    info@lightimmigrants.ca
+                    info@immigrantslight.ca
                   </a>
                 </div>
               </div>
